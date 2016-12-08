@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Jenkins">
+      <UniqueIdentifier>{ebb2bce4-775b-43bd-8a1f-44d76ca85abd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FNV">
+      <UniqueIdentifier>{dd532303-bbd0-4fb3-b5d3-1e5f645b2974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MiscHashes">
+      <UniqueIdentifier>{e1eaf15e-068f-41ee-ab4b-f701ec6c0b7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hseih">
+      <UniqueIdentifier>{c83c53c9-a4ad-4029-9bb7-b4dffc1c1347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MDA5">
+      <UniqueIdentifier>{6df15bd2-c33f-4bdb-8835-757645efb55f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\jenkins_oaat_ref.cpp">
+      <Filter>Jenkins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jenkins_lookup2_ref.cpp">
+      <Filter>Jenkins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jenkins_lookup3_ref.cpp">
+      <Filter>Jenkins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\jenkins_spooky_ref.cpp">
+      <Filter>Jenkins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fnv1a_ref.cpp">
+      <Filter>FNV</Filter>
+    </ClCompile>
+    <ClCompile Include="src\addtive_ref.cpp">
+      <Filter>MiscHashes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rotating_ref.cpp">
+      <Filter>MiscHashes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\universal_ref.cpp">
+      <Filter>MiscHashes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\zobrist_ref.cpp">
+      <Filter>MiscHashes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hseih_ref.cpp">
+      <Filter>Hseih</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ctnew.cpp" />
+    <ClCompile Include="src\mda5_ref.cpp">
+      <Filter>MDA5</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\inc\hashTools\hashTools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

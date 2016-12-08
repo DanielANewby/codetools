@@ -1,0 +1,16 @@
+# Visual studio local and temp files
+*.sdf
+*.suo
+*.user
+*.opensdf
+*.ipch
+*.VC.db
+*.VC.opendb
+.vc/
+
+# Build folders
+bin/
+build/
+Build/
+obj/
+pdb/

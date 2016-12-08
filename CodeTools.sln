@@ -1,0 +1,70 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hashTools", "HashTools\HashTools.vcxproj", "{38C991BC-974C-4B82-9717-471616FDEB48}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C} = {3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctMemory", "ctMemory\ctMemory.vcxproj", "{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FC6ED929-2504-49AF-94DF-FEAFFE21DC8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hashTools", "hashTools", "{85DD680B-E784-40B2-A7F8-926763C699A8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hashTools_smoke", "tests\htSmoke\hashTools_smoke.vcxproj", "{8E9F3D38-A599-49AD-9C82-0EE11B5964E3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C} = {3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}
+		{38C991BC-974C-4B82-9717-471616FDEB48} = {38C991BC-974C-4B82-9717-471616FDEB48}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8823F395-BDB5-4E8D-BCE8-2A64BB510D61}"
+	ProjectSection(SolutionItems) = preProject
+		CopyrightHeader.txt = CopyrightHeader.txt
+		LICENSE.txt = LICENSE.txt
+		MIT-LICENSE = MIT-LICENSE
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38C991BC-974C-4B82-9717-471616FDEB48}.Debug|x64.ActiveCfg = Debug|x64
+		{38C991BC-974C-4B82-9717-471616FDEB48}.Debug|x64.Build.0 = Debug|x64
+		{38C991BC-974C-4B82-9717-471616FDEB48}.Debug|x86.ActiveCfg = Debug|Win32
+		{38C991BC-974C-4B82-9717-471616FDEB48}.Debug|x86.Build.0 = Debug|Win32
+		{38C991BC-974C-4B82-9717-471616FDEB48}.Release|x64.ActiveCfg = Release|x64
+		{38C991BC-974C-4B82-9717-471616FDEB48}.Release|x64.Build.0 = Release|x64
+		{38C991BC-974C-4B82-9717-471616FDEB48}.Release|x86.ActiveCfg = Release|Win32
+		{38C991BC-974C-4B82-9717-471616FDEB48}.Release|x86.Build.0 = Release|Win32
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}.Debug|x64.ActiveCfg = Debug|x64
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}.Debug|x64.Build.0 = Debug|x64
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}.Debug|x86.ActiveCfg = Debug|Win32
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}.Debug|x86.Build.0 = Debug|Win32
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}.Release|x64.ActiveCfg = Release|x64
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}.Release|x64.Build.0 = Release|x64
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}.Release|x86.ActiveCfg = Release|Win32
+		{3A5CF6B3-590F-4118-B6DE-41E9F95F2D2C}.Release|x86.Build.0 = Release|Win32
+		{8E9F3D38-A599-49AD-9C82-0EE11B5964E3}.Debug|x64.ActiveCfg = Debug|x64
+		{8E9F3D38-A599-49AD-9C82-0EE11B5964E3}.Debug|x64.Build.0 = Debug|x64
+		{8E9F3D38-A599-49AD-9C82-0EE11B5964E3}.Debug|x86.ActiveCfg = Debug|Win32
+		{8E9F3D38-A599-49AD-9C82-0EE11B5964E3}.Debug|x86.Build.0 = Debug|Win32
+		{8E9F3D38-A599-49AD-9C82-0EE11B5964E3}.Release|x64.ActiveCfg = Release|x64
+		{8E9F3D38-A599-49AD-9C82-0EE11B5964E3}.Release|x64.Build.0 = Release|x64
+		{8E9F3D38-A599-49AD-9C82-0EE11B5964E3}.Release|x86.ActiveCfg = Release|Win32
+		{8E9F3D38-A599-49AD-9C82-0EE11B5964E3}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{85DD680B-E784-40B2-A7F8-926763C699A8} = {FC6ED929-2504-49AF-94DF-FEAFFE21DC8B}
+		{8E9F3D38-A599-49AD-9C82-0EE11B5964E3} = {85DD680B-E784-40B2-A7F8-926763C699A8}
+	EndGlobalSection
+EndGlobal

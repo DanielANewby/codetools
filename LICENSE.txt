@@ -1,0 +1,35 @@
+Licensing is hard...
+
+The codeTools libraries and original source are, for the most part, licensed
+under the MIT license, a copy of which should be included in the package you've
+downloaded as `MIT-LICENSE'. Some portions or files of the source for codeTools
+fall under different license, often public domain, occaisionally a custom
+license (Hseih's hash for example).
+
+All sources originating under other licenses will have their originating license
+and attribution in the header of the pertaining files. Refer to individual
+source files for licensing information.
+
+A good faith attempt to guarantee compatibility with the MIT license has been
+made by the library authors. Please let us know if there are any conflicts that
+we are not aware of.
+
+Following is a listing of source which originates or falls under a different
+license, by license:
+
+Public Domain:
+* hashTools/additive_ref.cpp
+* hashTools/rotatin_ref.cpp
+* hashTools/fnv1a_ref.cpp
+* hashTools/jenkins_ooat_ref.cpp
+* hashTools/jenkins_lookup2_ref.cpp
+* hashTools/jenkins_lookup3_ref.cpp
+* hashTools/jenkins_spooky_ref.cpp
+* hashTools/universal_ref.cpp
+* hashTools/zobrist_ref.cpp
+
+Paul Hseih's license: http://www.azillionmonkeys.com/qed/weblicense.html
+* hashTools/hseih_ref.cpp
+
+Other, see specific files for more details:
+* hashTools/mda5_ref.cpp -- MD5 code open licensed by RSA Data Security, Inc.
