@@ -23,6 +23,7 @@
     <RootNamespace>codetools</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>library_template</ProjectName>
+    <ProjectGuid>{19FD521B-E07F-4122-B106-758A39C72AF7}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
