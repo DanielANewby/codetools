@@ -72,7 +72,7 @@ BEGIN_HASHTOOLS_NS
 	//////////////////////////////////////////////////////////////////////////////
 	// Cryptographic hashes
 	//////////////////////////////////////////////////////////////////////////////
-	EXPORT uint32_t md5_ref(const void* message, size_t length) noexcept;
+	EXPORT void md5_ref(const void* message, size_t length, unsigned char* digest) noexcept;
 	EXPORT uint32_t sha1_ref(const void* message, size_t length) noexcept;
 
 END_HASHTOOLS_NS
