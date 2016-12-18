@@ -348,3 +348,18 @@ static void MD5_memset(
 	for (i = 0; i < len; i++)
 		((char *)output)[i] = (char)value;
 }
+
+BEGIN_HASHTOOLS_NS
+
+EXPORT void md5_ref(const void* message, size_t length, unsigned char* digest) noexcept
+{
+	if (!digest || !message)
+		return;
+
+	MD5_CTX context;
+	MD5Init(&context);
+	MD5Update(&context, (unsigned char*)message, length);
+	MD5Final(digest, &context);
+}
+
+END_HASHTOOLS_NS
