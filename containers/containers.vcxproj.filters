@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\ctnew.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Ring Buffer">
+      <UniqueIdentifier>{d0e99e4f-0e75-4f1e-8125-42aabfd44f31}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\inc\containers\ring_buffer.h">
+      <Filter>Ring Buffer</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
