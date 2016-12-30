@@ -12,5 +12,6 @@
     <ClInclude Include="..\inc\containers\ring_buffer.h">
       <Filter>Ring Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\containers\iterators.h" />
   </ItemGroup>
 </Project>
