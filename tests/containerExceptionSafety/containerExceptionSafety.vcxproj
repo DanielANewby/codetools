@@ -18,16 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="containerSmoke.cpp" />
-    <ClCompile Include="ringbufferSmokeTest.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>codetools</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectGuid>{DBB7A00D-D420-4098-85BE-8B88875AA142}</ProjectGuid>
-    <ProjectName>conainerSmoke</ProjectName>
+    <ProjectGuid>{1FEBA981-E5A1-48F0-A50B-8F88BF23C61C}</ProjectGuid>
+    <ProjectName>containerExceptionSafety</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

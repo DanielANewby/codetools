@@ -6,7 +6,6 @@
 #include <initializer_list>
 #include <iterator>
 
-#include <vector>
 #include <new>
 
 #include "iterators.h"
@@ -23,20 +22,20 @@ namespace codetools
 		using difference_type = typename container_type::difference_type;
 
 		using my_type = ring_buffer_iterator_core;
-		ring_buffer_iterator_core():container(0), logical_index(k_logical_end) {}
-		ring_buffer_iterator_core(container_pointer pc, size_t index):
-			container(pc), logical_index(index) 
+		ring_buffer_iterator_core() noexcept :container{0}, logical_index{k_logical_end} {}
+		ring_buffer_iterator_core(container_pointer pc, size_t index) noexcept :
+			container{pc}, logical_index{index}
 		{
 			if (logical_index >= container->size())
 				logical_index = k_logical_end;
 		}
-		ring_buffer_iterator_core(const MyContainer* pc, size_t index) :
+		ring_buffer_iterator_core(const MyContainer* pc, size_t index) noexcept :
 			ring_buffer_iterator_core(const_cast<container_pointer>(pc), index)
 		{}
-		ring_buffer_iterator_core(const my_type& rhs):
+		ring_buffer_iterator_core(const my_type& rhs) noexcept :
 			ring_buffer_iterator_core(rhs.container, rhs.logical_index)
 		{}
-		ring_buffer_iterator_core(my_type&& rhs):ring_buffer_iterator_core(rhs) {}
+		ring_buffer_iterator_core(my_type&& rhs) = default;
 		~ring_buffer_iterator_core() {}
 
 		my_type& operator=(const my_type& rhs) noexcept { 
@@ -44,8 +43,9 @@ namespace codetools
 			logical_index = rhs.logical_index;
 			if (logical_index > container->size())
 				logical_index = k_logical_end;
+			return *this;
 		}
-		my_type& operator=(my_type&& rhs) { *this = rhs; }
+		my_type& operator=(my_type&& rhs) { return (*this = rhs); }
 
 		bool operator==(const my_type& rhs) const { 
 			return same_container(rhs) && (rhs.logical_index == logical_index);
@@ -56,16 +56,19 @@ namespace codetools
 		}
 
 		my_type& operator+=(const difference_type dist) {
-			logical_index += dist;
+			if (logical_index == k_logical_end)
+				logical_index = container->size() + dist;
+			else
+				logical_index += dist;
 			if (logical_index >= container->size())
 				logical_index = k_logical_end;
 			return *this;
 		}
 
-		difference_type operator-(const my_type& rhs) const { 
-			if (logical_index == k_logical_end)
-				return container->size();
-			return logical_index - rhs.logical_index;
+		difference_type operator-(const my_type& rhs) const {
+			auto li = (logical_index == k_logical_end) ? container->size() : logical_index;
+			auto ri = (rhs.logical_index == k_logical_end) ? container->size() : rhs.logical_index;
+			return li - ri;
 		}
 
 		reference operator*() const { return container->at(logical_index); }
@@ -100,18 +103,18 @@ namespace codetools
 		using reverse_iterator = std::reverse_iterator<iterator>;
 
 		// Constructors/dtor
-		ring_buffer(size_t size = default_ring_buffer_size, const T& initVal = T{});
+		ring_buffer(size_t capacity = default_ring_buffer_size) noexcept;
 		ring_buffer(std::initializer_list<T>);
 		ring_buffer(size_t capacity, std::initializer_list<T>);
 		template <class InputIterator>
 		ring_buffer(size_t capacity, InputIterator start, InputIterator end);
 		ring_buffer(const ring_buffer<T>&);
-		ring_buffer(ring_buffer<T>&&);
+		ring_buffer(ring_buffer<T>&&) noexcept;
 		~ring_buffer();
 
 		// Assignment
 		ring_buffer<T>& operator=(const ring_buffer<T>& rhs);
-		ring_buffer<T>& operator=(ring_buffer<T>&& rhs);
+		ring_buffer<T>& operator=(ring_buffer<T>&& rhs) noexcept;
 		ring_buffer<T>& operator=(std::initializer_list<T> il);
 
 		// Size and capacity
@@ -152,19 +155,29 @@ namespace codetools
 		iterator insert(const_iterator pos, rvalue_reference elem);
 		iterator insert(const_iterator pos, std::initializer_list<T> elems);
 		template <class InputIterator>	
-		iterator insert(const_iterator pos, InputIterator first, InputIterator last);
+		typename std::enable_if<is_iterator<InputIterator>::value, iterator>::type
+		insert(const_iterator pos, InputIterator first, InputIterator last)
+		{
+			return insert_impl(pos, first, last);
+		}
 
-		iterator erase(const_iterator pos);
-		iterator erase(const_iterator first, const_iterator last);
+		iterator erase(const const_iterator& pos);
+		iterator erase(const const_iterator& first, const const_iterator& last);
 
 		void clear();
 
-		void swap(ring_buffer<T>& rhs)
+		void swap(ring_buffer<T>& rhs) noexcept
 		{
-			std::swap(m_size, rhs.m_size);
-			std::swap(m_capacity, rhs.m_capacity);
-			std::swap(m_head, rhs.m_head);
-			std::swap(m_buffer, rhs.m_buffer);
+			using std::swap;
+			swap(m_size, rhs.m_size);
+			swap(m_capacity, rhs.m_capacity);
+			swap(m_head, rhs.m_head);
+			swap(m_buffer, rhs.m_buffer);
+		}
+
+		void swap(ring_buffer<T>&& rhs) noexcept
+		{
+			swap(rhs);
 		}
 		
 		// Iteration
@@ -185,6 +198,8 @@ namespace codetools
 		const_reverse_iterator crbegin() const noexcept { return const_reverse_iterator(end()); }
 		const_reverse_iterator crend() const noexcept { return const_reverse_iterator(begin()); }
 
+		size_t _Head() const noexcept { return m_head; };
+
 	private:
 		size_t logical_to_real_index(size_t logical_index)
 		{
@@ -193,8 +208,26 @@ namespace codetools
 
 		void dispose() {
 			clear();
-			delete m_buffer;
+			delete [] ((char*)m_buffer);
 			m_buffer = nullptr;
+		}
+
+		template <class ForwardIterator>
+		iterator insert_impl(const_iterator pos, ForwardIterator first, ForwardIterator last)
+		{
+			ring_buffer<T> other { m_capacity, first, last };
+			const_iterator from { pos };
+			while (other.size() < m_capacity && from != end())
+				other.push_back(*from++);
+			const_reverse_iterator rev { pos };
+			auto ins_head = 0;
+			while (other.size() < m_capacity && rev != rend())
+			{
+				other.push_front(*rev++);
+				++ins_head;
+			}
+			swap(other);
+			return begin() + ins_head;
 		}
 
 		size_t m_size;
@@ -205,16 +238,22 @@ namespace codetools
 	};
 
 	template <class T>
-	ring_buffer<T>::ring_buffer(size_t size = default_ring_buffer_size, const T& initVal = T{}):
-		m_size(size),
-		m_capacity(size),
+	ring_buffer<T>::ring_buffer(size_t capacity = default_ring_buffer_size) noexcept:
+		m_size(0),
+		m_capacity(capacity),
 		m_head(0),
 		m_buffer(nullptr)
 	{
-		if (m_size)
-			m_buffer = (T*)(new char[sizeof(T) * m_size]);
-		for (size_t n = 0; n < m_size; ++n)
-			new (&m_buffer[n]) T(initVal);
+		try 
+		{
+			if (m_capacity)
+				m_buffer = (T*)(new char[sizeof(T) * m_capacity]);
+		}
+		catch (...)
+		{
+			m_buffer = nullptr;
+			m_capacity = 0;
+		}
 	}
 
 	template <class T>
@@ -230,20 +269,10 @@ namespace codetools
 	template <class T>
 		template <class InputIterator>
 	ring_buffer<T>::ring_buffer(size_t capacity, InputIterator start, InputIterator end) :
-		m_size(capacity),
-		m_capacity(capacity),
-		m_head(0),
-		m_buffer(nullptr)
+		ring_buffer(capacity)
 	{
-		if (m_size)
-			m_buffer = (T*)(new char[sizeof(T) * m_size]);
-		for (size_t n = 0; n < m_size; ++n)
-		{
-			if (start != end)
-				new (&m_buffer[n]) T(*start++);
-			else
-				new (&m_buffer[n]) T();
-		}
+		while (start != end)
+			push_back(*start++);
 	}
 
 	template <class T>
@@ -252,13 +281,10 @@ namespace codetools
 	{}
 
 	template <class T>
-	ring_buffer<T>::ring_buffer(ring_buffer<T>&& rhs) :
-		ring_buffer(rhs)
+	ring_buffer<T>::ring_buffer(ring_buffer<T>&& rhs) noexcept :
+		ring_buffer()
 	{
-		rhs.m_size = 0;
-		rhs.m_capacity = 0;
-		rhs.m_head = 0;
-		rhs.m_buffer = nullptr;
+		swap(rhs);
 	}
 
 	template <class T>
@@ -271,32 +297,38 @@ namespace codetools
 	ring_buffer<T>& ring_buffer<T>::operator=(const ring_buffer<T>& rhs)
 	{
 		swap(ring_buffer<T>(rhs));
+		return *this;
 	}
 
 	template <class T>
-	ring_buffer<T>& ring_buffer<T>::operator=(ring_buffer<T>&& rhs)
+	ring_buffer<T>& ring_buffer<T>::operator=(ring_buffer<T>&& rhs) noexcept
 	{
 		swap(rhs);
+		return *this;
 	}
 
 	template <class T>
 	ring_buffer<T>& ring_buffer<T>::operator=(std::initializer_list<T> il)
 	{
 		swap(ring_buffer<T>(il));
+		return *this;
 	}
 
 	template <class T>
 	void ring_buffer<T>::reserve(size_t requested)
 	{
-		if (m_size < requested && m_capacity != requested)
+		if (m_capacity < requested)
 			swap(ring_buffer<T>(requested, begin(), end()));
 	}
 	
 	template <class T>
 	void ring_buffer<T>::resize(size_t requested)
 	{
-		if (requested > m_capacity)
-			swap(ring_buffer<T>(requested, begin(), end()));
+		reserve(requested);
+		while (requested > m_size)
+			new (&m_buffer[logical_to_real_index(m_size++)]) T;
+		if (requested < m_size)
+			pop_back(m_size - requested);
 	}
 
 	template <class T>
@@ -333,8 +365,7 @@ namespace codetools
 			pop_back();
 		if (m_head == 0)
 			m_head = m_capacity;
-		size_t pos = logical_to_real_index(--m_head);
-		new (&m_buffer[pos]) T(elem);
+		new (&m_buffer[--m_head]) T(elem);
 		++m_size;
 	}
 
@@ -345,9 +376,8 @@ namespace codetools
 			pop_back();
 		if (m_head == 0)
 			m_head = m_capacity;
-		size_t pos = logical_to_real_index(--m_head);
-		new (&m_buffer[pos]) T(elem);
-		++m_size
+		new (&m_buffer[--m_head]) T(elem);
+		++m_size;
 	}
 
 	template <class T>
@@ -358,6 +388,7 @@ namespace codetools
 		size_t pos = logical_to_real_index(m_size++);
 		new (&m_buffer[pos]) T(elem);
 	}
+
 	template <class T>
 	void ring_buffer<T>::push_back(rvalue_reference elem)
 	{
@@ -377,12 +408,13 @@ namespace codetools
 		m_head = logical_to_real_index(count);
 		m_size -= count;
 	}
+
 	template <class T>
 	void ring_buffer<T>::pop_back(size_t count = 1)
 	{
 		if (count > m_size)
 			count = m_size;
-		size_t newSize = m_size - countt;
+		size_t newSize = m_size - count;
 		for (size_t n = newSize; n < m_size; ++n)
 			m_buffer[logical_to_real_index(n)].~T();
 		m_size -= count;
@@ -397,10 +429,12 @@ namespace codetools
 		if (m_size == m_capacity)
 			pop_front();
 		iterator iter = end();
-		m_buffer[logical_to_real_index(m_size)] = std::move(*--iter);
+		iterator ins = iterator(this, pos - begin());
+		new (&m_buffer[logical_to_real_index(m_size++)]) T(std::move(*--iter));
 		for ( ; pos < iter; --iter)
 			*iter = std::move(*(iter - 1));
-		*pos = elem;
+		*ins = elem;
+		return ins;
 	}
 
 	template <class T>
@@ -410,27 +444,24 @@ namespace codetools
 		if (m_size == m_capacity)
 			pop_front();
 		iterator iter = end();
-		m_buffer[logical_to_real_index(m_size)] = std::move(*--iter);
+		iterator ins = iterator(this, pos - begin());
+		m_buffer[logical_to_real_index(m_size++)] = std::move(*--iter);
 		for (; pos < iter; --iter)
 			*iter = std::move(*(iter - 1));
-		*pos = std::move(elem);
+		*ins = std::move(elem);
+		return ins;
 	}
 
 	template <class T>
 	typename ring_buffer<T>::iterator
 	ring_buffer<T>::insert(const_iterator pos, std::initializer_list<T> elems)
 	{
-		insert(pos, elems.begin(), elems.end());
+		return insert(pos, elems.begin(), elems.end());
 	}
 
 	template <class T>
-		template <class InputIterator>
 	typename ring_buffer<T>::iterator
-	ring_buffer<T>::insert(const_iterator pos, InputIterator first, InputIterator last);
-
-	template <class T>
-	typename ring_buffer<T>::iterator
-	ring_buffer<T>::erase(typename ring_buffer<T>::const_iterator pos)
+	ring_buffer<T>::erase(typename const ring_buffer<T>::const_iterator& pos)
 	{
 		return erase(pos, pos + 1);
 	}
@@ -438,23 +469,23 @@ namespace codetools
 	template <class T>
 	typename ring_buffer<T>::iterator
 	ring_buffer<T>::erase(
-		typename ring_buffer<T>::const_iterator first,
-		typename ring_buffer<T>::const_iterator last)
+		typename const ring_buffer<T>::const_iterator& first,
+		typename const ring_buffer<T>::const_iterator& last)
 	{
-		difference_type firstIdx = first - begin();
-		iterator copyiter = iterator(this, last - begin());
-		iterator enditer = end();
-		for (iterator iter = iterator(this, first - begin()); iter != last; ++iter)
+		difference_type first_index = first - begin();
+		if (first < last)
 		{
-			(*iter).~T();
-			if (copyiter != enditer)
+			const_iterator copy_from { this, last - begin() };
+			for (iterator copy_to { this, first_index }; copy_to != end(); ++copy_to, ++copy_from)
 			{
-				new (&*iter) T(std::move(*copyiter));
-				(*copyiter++).~T();
+				if (copy_from < end())
+					*copy_to = std::move(*copy_from);
+				else
+					(*copy_to).~T();
 			}
+			m_size -= last - first;
 		}
-		m_size -= last - first;
-		return iterator(this, firstIdx);
+		return iterator { this, first_index };
 	}
 
 	template <class T>

@@ -37,7 +37,7 @@ namespace codetools
 		const_random_access_iterator(const_core_pointer rhs) noexcept : const_random_access_iterator(*rhs) {}
 		const_random_access_iterator(core_rvalue rhs) noexcept : core(std::move(rhs)) {}
 		template <class ... Args>
-		const_random_access_iterator(Args... args) noexcept : core(std::forward<Args>(args)...) {}
+		explicit const_random_access_iterator(Args... args) noexcept : core(std::forward<Args>(args)...) {}
 		~const_random_access_iterator() noexcept {}
 
 		iterator_reference operator=(const_reference_iterator rhs) { core = rhs.core; return *this; }
@@ -103,11 +103,11 @@ namespace codetools
 		random_access_iterator(const_core_pointer rhs) noexcept : base_type(*rhs) {}
 		random_access_iterator(core_rvalue rhs) noexcept : base_type(std::move(rhs)) {}
 		template <class ... Args>
-		random_access_iterator(Args... args) noexcept : base_type(std::forward<Args>(args)...) {}
+		explicit random_access_iterator(Args... args) noexcept : base_type(std::forward<Args>(args)...) {}
 		~random_access_iterator() noexcept {}
 
 		iterator_reference operator=(const_reference_iterator rhs) { core = rhs.core; return *this; }
-		iterator_reference operator=(rvalue_reference_iterator rhs) { core = std::move(rhs.core); }
+		iterator_reference operator=(rvalue_reference_iterator rhs) { core = std::move(rhs.core); return *this; }
 
 		bool operator==(const_reference_iterator rhs) const { return core == rhs.core; }
 		bool operator!=(const_reference_iterator rhs) const { return !(core == rhs.core); }
@@ -142,6 +142,13 @@ namespace codetools
 	{
 		return rhs + dist;
 	}
+
+	template<class T, class = void>
+	struct is_iterator : std::false_type {}; // default definition
+
+	template<class T>
+	struct is_iterator<T, std::void_t<typename std::iterator_traits<T>::iterator_category>>
+		: std::true_type {};	// defined if iterator_category is provided by iterator_traits<_Ty>
 }
 
 #endif // CODETOOLS_ITERATORS_H
