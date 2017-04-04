@@ -24,7 +24,7 @@ ChildProcess::ChildProcess(
 	m_inheritHandles = inheritHandles;
 	m_createFlags = createFlags;
 	m_environment = environment;
-	ProcessDescriptor lp = GetCurrentProcess();
+	ProcessDescriptor lp = ::GetCurrentProcess();
 	if (stdIn)
 		DuplicateHandle(lp, stdIn, lp, &m_childStdIn, 0, TRUE, DUPLICATE_SAME_ACCESS);
 	if (stdOut)
@@ -44,7 +44,7 @@ ChildProcess::ChildProcess(const ChildProcess& rhs):
 	copyStr(m_commandLine, rhs.m_commandLine);
 	copyStr(m_cwd, rhs.m_cwd);
 
-	ProcessDescriptor lp = GetCurrentProcess();
+	ProcessDescriptor lp = ::GetCurrentProcess();
 	if (rhs.m_childStdIn)
 		DuplicateHandle(lp, rhs.m_childStdIn, lp, &m_childStdIn, 0, TRUE, DUPLICATE_SAME_ACCESS);
 	if (rhs.m_childStdOut)
@@ -128,7 +128,7 @@ void ChildProcess::SetStdInput(IODescriptor newStdIn)
 		m_childStdIn = 0;
 		if (newStdIn)
 		{
-			HANDLE lp = GetCurrentProcess();
+			HANDLE lp = ::GetCurrentProcess();
 			DuplicateHandle(lp, newStdIn, lp, &m_childStdIn, 0, TRUE, DUPLICATE_SAME_ACCESS);
 		}
 	}
@@ -143,7 +143,7 @@ void ChildProcess::SetStdOutput(IODescriptor newStdOut)
 		m_childStdOut = 0;
 		if (newStdOut)
 		{
-			HANDLE lp = GetCurrentProcess();
+			HANDLE lp = ::GetCurrentProcess();
 			DuplicateHandle(lp, newStdOut, lp, &m_childStdOut, 0, TRUE, DUPLICATE_SAME_ACCESS);
 		}
 	}
@@ -158,7 +158,7 @@ void ChildProcess::SetStdError(IODescriptor newStdErr)
 		m_childStdErr = 0;
 		if (newStdErr)
 		{
-			HANDLE lp = GetCurrentProcess();
+			HANDLE lp = ::GetCurrentProcess();
 			DuplicateHandle(lp, newStdErr, lp, &m_childStdErr, 0, TRUE, DUPLICATE_SAME_ACCESS);
 		}
 	}

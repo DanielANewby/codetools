@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\ctnew.cpp" />
+    <ClCompile Include="src\ChildProcess.cpp" />
+    <ClCompile Include="src\CurrentProcess.cpp" />
+    <ClCompile Include="src\processes.cpp" />
+    <ClCompile Include="src\ProcessDebugProvider.cpp">
+      <Filter>Debug Providers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\inc\processes\ChildProcess.h" />
+    <ClInclude Include="..\inc\processes\processes.h" />
+    <ClInclude Include="..\inc\processes\process_idebug.h">
+      <Filter>Debug Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\processes\ProcessDebugProvider.h">
+      <Filter>Debug Providers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Debug Providers">
+      <UniqueIdentifier>{b5275940-b1fa-46e7-bfbb-5bd310152950}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -8,7 +8,7 @@
 
 BEGIN_PROCESSES_NS
 
-class EXPORT ChildProcess
+class EXPORT ChildProcess : public IProcess
 {
 public:
 	ChildProcess();
@@ -39,6 +39,18 @@ public:
 	void SetStdError(IODescriptor newStdErr);
 	void SetStdHandles(IODescriptor In, IODescriptor out, IODescriptor err);
 	void ClearStdHandles();
+
+	virtual ProcessDescriptor GetHandle();
+	virtual ProcessID GetID();
+
+	virtual std::wstring GetModule() = 0;
+	virtual std::wstring GetCommand() = 0;
+	virtual std::wstring GetWorkingDir() = 0;
+	virtual std::map<std::wstring, std::wstring> GetEnvironment() = 0;
+	virtual unsigned GetCreationFlags() = 0;
+	virtual IODescriptor GetStdInput() = 0;
+	virtual IODescriptor GetStdOuput() = 0;
+	virtual IODescriptor GetStdError() = 0;
 
 	void Start();
 	bool Join(unsigned timeout = -1) const;

@@ -105,7 +105,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ctmemory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ctmemory.lib;psapi.lib%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -123,7 +123,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ctmemory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ctmemory.lib;psapi.lib%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -145,7 +145,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ctmemory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ctmemory.lib;psapi.lib%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -167,16 +167,21 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ctmemory.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ctmemory.lib;psapi.lib%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ctnew.cpp" />
     <ClCompile Include="src\ChildProcess.cpp" />
+    <ClCompile Include="src\CurrentProcess.cpp" />
+    <ClCompile Include="src\ProcessDebugProvider.cpp" />
+    <ClCompile Include="src\processes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\processes\ChildProcess.h" />
+    <ClInclude Include="..\inc\processes\ProcessDebugProvider.h" />
     <ClInclude Include="..\inc\processes\processes.h" />
+    <ClInclude Include="..\inc\processes\process_idebug.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
