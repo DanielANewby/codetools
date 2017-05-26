@@ -55,7 +55,7 @@ BEGIN_PROCESSES_NS
 class DebugInterface;
 class PSAPIInterface;
 
-class IProcess
+class EXPORT IProcess
 {
 public:
 	virtual ~IProcess() = default;
